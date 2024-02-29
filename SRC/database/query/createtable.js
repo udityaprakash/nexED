@@ -1,18 +1,23 @@
-const pool = require('../connections/postgreSQL');
+const {QueryExecuter} = require('../connections/postgreSQL');
 
 async function Retry(query) {
     try {
-      var Query = query;
-      var re = await pool.query(Query);
-      console.log("query executed successfully for :- "+ Query);
+      var re =await QueryExecuter(query);
+      if(!re.error){
+        // console.log('re',re.data);
+        // console.log("query executed successfully for :- "+ query);
+        return;
+      }else{
+        console.log('error: ',re.error,'that is : ',re.data);
+      }
     } catch (error) {
-      console.error('Retrying Query...');
+      console.error('Retrying Query...',error);
       Retry(query);
     }
   }
 
 const User = `
-CREATE TABLE IF NOT EXISTS user(
+CREATE TABLE IF NOT EXISTS customer (
     user_id BIGINT PRIMARY KEY,
     username VARCHAR(255),
     profile_url VARCHAR(512),
@@ -22,6 +27,7 @@ CREATE TABLE IF NOT EXISTS user(
   );`;
 
 async function createAllTables(){
+
     await Retry(User);
 }  
 
