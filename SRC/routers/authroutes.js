@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../core/authorize');
-const middleware = require('../middlewares/requiredfields');
+const required = require('../middlewares/requiredfields');
 
 
-router.post('/user/Signup',middleware.signup, auth.handleuser);
+router.post('/user/Signup',required.signup, auth.signup);
+
 
 module.exports = router;
