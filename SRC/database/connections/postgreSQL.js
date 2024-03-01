@@ -2,9 +2,7 @@ const { Pool } = require('pg');
 
 require('dotenv').config();
 
-// var pool;
-// try{
-var QueryExecuter =async (query) => {
+var client =async () => {
         try{
 
             const poll = new Pool({
@@ -17,10 +15,8 @@ var QueryExecuter =async (query) => {
                   },
             });
             var client = await poll.connect();
-            let exc = await client.query(query);
             console.log('Database query executed...');
-            client.release();
-            return {error:false,status:0,data:exc};
+            return {error:false,status:0,run:client};
         }catch(err){
             console.error('Database connection failed');
             if(err.code === 'PROTOCOL_CONNECTION_LOST'){
@@ -37,4 +33,4 @@ var QueryExecuter =async (query) => {
         }
     }
 
-module.exports = {QueryExecuter};
+module.exports = {client};

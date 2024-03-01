@@ -1,4 +1,4 @@
-const {QueryExecuter} = require('../connections/postgreSQL');
+const {client} = require('../connections/postgreSQL');
 
 async function Retry(query) {
     try {
@@ -27,8 +27,13 @@ CREATE TABLE IF NOT EXISTS customer (
   );`;
 
 async function createAllTables(){
-
-    await Retry(User);
+    const h = await client();
+    await h.run.query(User).then(()=>{
+      console.log('customer table created');
+    }).catch((err)=>{
+      console.log("table not created as : "+err);
+    });
+    
 }  
 
 module.exports = {createAllTables}

@@ -1,6 +1,6 @@
 var query = {
-    insert_user:(userid,username,profile_url,email)=>{
-        return [`Insert into customer (user_id,username,profile_url,email) values($1,$2,$3,$4,$5) RETURNING *`,userid,username,profile_url,email]   
+    insert_user: (userid,username,profile_url,email) => {
+        return (`Insert into customer (user_id,username,profile_url,email) values($1,$2,$3,$4)`,[userid,username,profile_url,email])  
     }
 }
 
