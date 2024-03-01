@@ -13,7 +13,6 @@ function verify(token){
                 return {error:false,data:authData};
             }
         });
-
 }
 
 let verifytoken =async (req, res, next) => {
@@ -22,25 +21,17 @@ let verifytoken =async (req, res, next) => {
         let acc_res = verify(bearerHeader);
         if(acc_res.error){
             if(acc_res.in === 'tokenex'){
-                let ref_res = verify(refreshHeader);
-                if(ref_res.error){
-                        res.status(401).json({error:true,re_login_required:true,message: acc_res.message});
-
-                }else{
-                    req.tokendata = ref_res.data;
-                    req.new_access_token =await jwt.sign({email:ref_res.data.email}, process.env.JWT_SECRET, {expiresIn: '10m'});
-                    next();
-                }
+                        res.status(401).json({error:true, re_login_required:true, message: acc_res.message});
     
             }else{
-                res.status(401).json({error:true,message: acc_res.message});
+                res.status(401).json({error:true, re_login_required:true, message: acc_res.message});
             }
         }else{
             req.tokendata = acc_res.data;
             next();
         }
     }else{
-        res.status(401).json({error:true,message: 'Bearer Token missing'});
+        res.status(401).json({error:true, re_login_required:false ,message: 'Bearer Token missing'});
     }
 };
 
