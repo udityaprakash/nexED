@@ -18,7 +18,6 @@ function verify(token){
 
 let verifytoken =async (req, res, next) => {
     const bearerHeader = req.headers['authorization'];
-    const refreshHeader = req.headers['refresh'];
     if(typeof bearerHeader !== 'undefined' && typeof refreshHeader !== 'undefined'){
         let acc_res = verify(bearerHeader);
         if(acc_res.error){

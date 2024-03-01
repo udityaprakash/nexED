@@ -1,14 +1,12 @@
 const express = require('express');
 const {createAllTables} = require('./SRC/database/query/createtable');
 const app = express();
-const port = 8080;
 require('dotenv').config();
 
+const port = process.env.PORT || 8080;
 
 createAllTables();
-// var k = ('Insert into customer (user_id,username,profile_url,email) values($1,$2,$3,$4)', [223437543,'dfsdfgs','bdsgvfgsfkjksjfvsdbfsddjsbg','udibbsf@gmail.com']);
-// var out = QueryExecuter(k);
-// console.log(out);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
