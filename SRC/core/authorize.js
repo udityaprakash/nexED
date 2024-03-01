@@ -23,9 +23,18 @@ const signup = async (req, res) => {
     }
 };
 
-// const login = async (res, req) => {
+let refreshUser = async (req,res) => {
+    const {email} = req.body;
+    let cli = await client();
+    let response = await cli.run.query(`Select * from customer where email = $1;`,[email]);
+    if(response.rows != 0){
+        const accToken = await jwt.sign({email:email, createdAt:Date.now()}, process.env.JWT_SECRET,{expiresIn: process.env.EXPIRE_IN});
+        res.status(200).json({error:false,tokens:accToken,message: 'User is refreshed and authorized'});
+    }else{
+        res.status(200).json({error:true,message: 'Invalid Email for refresh token'});
+    }
 
-// }
+}
 
 
 
@@ -33,6 +42,7 @@ const signup = async (req, res) => {
 
 const authhand = {
     signup,
+    refreshUser
 };
 
 module.exports = authhand;

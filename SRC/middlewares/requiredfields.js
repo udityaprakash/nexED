@@ -10,8 +10,21 @@ const signup = (req, res, next) => {
     }
 };
 
+const emailfield = (req, res, next) => {
+    const {email} = req.body;
+    if(email){
+        next();
+    } else {
+        res.status(400).json({
+            error: true, 
+            message: 'Please provide all required fields', 
+            fields: ["email"]});
+    }
+}
+
 const middleware = {
     signup,
+    emailfield
 };
 
 module.exports = middleware;

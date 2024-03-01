@@ -13,7 +13,6 @@ function verify(token){
                 return {error:false,data:authData};
             }
         });
-
 }
 
 let verifytoken =async (req, res, next) => {
