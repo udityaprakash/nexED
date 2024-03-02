@@ -46,4 +46,19 @@ const saveBanner = async (req,res)=>{
     }
 }
 
-module.exports = {saveBanner};
+const extractedPhoto = async (req,res)=>{
+  try{
+      const id = req.params.id;
+      const photo = await bannerschema.findOne({_id:id});
+      if(photo){
+          res.set('Content-Type', photo.banner_photo.contentType);
+          res.send(photo.banner_photo.data);
+      }else{
+          res.status(404).json({error:true, msg: 'No offer found' });
+      }
+  }catch(_error){
+      res.status(500).json({ error:true, err:_error, msg: 'Internal server error', });
+  }
+}
+
+module.exports = {saveBanner, extractedPhoto};

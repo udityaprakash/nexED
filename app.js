@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/admin', require('./SRC/routers/adminroute'));
 app.use('/auth', require('./SRC/routers/authroutes'));
+app.use('', require('./SRC/routers/otherroutes'));
 
 app.all('*', (req, res) => {
   res.status(404).json({error:true, message: 'Page not found'});
