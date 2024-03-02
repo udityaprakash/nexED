@@ -12,7 +12,7 @@ connectmongoDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use('/', require('./routes/getroutes'));
+app.use('/admin', require('./SRC/routers/adminroute'));
 app.use('/auth', require('./SRC/routers/authroutes'));
 
 app.all('*', (req, res) => {
