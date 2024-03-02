@@ -1,4 +1,5 @@
 const bannerschema = require('../../database/schema/banner');
+const {compressor} = require('../../middlewares/imageprocess');
 const saveBanner = async (req,res)=>{
     try{
         if (!req.file) {
@@ -38,7 +39,8 @@ const saveBanner = async (req,res)=>{
           }
         
 
-    }catch{
+    }catch(error){
+        console.log(error);
         res.status(500).json({error:true, err:error, msg: 'Unsupported image format', });
     }
 }

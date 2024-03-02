@@ -22,9 +22,21 @@ const emailfield = (req, res, next) => {
     }
 }
 
+const imagefield = (req, res, next) => {
+    if(req.file){
+        next();
+    } else {
+        res.status(400).json({
+            error: true, 
+            message: 'Please provide all required fields', 
+            fields: ["banner_image"]});
+    }
+}
+
 const middleware = {
     signup,
-    emailfield
+    emailfield,
+    imagefield
 };
 
 module.exports = middleware;
