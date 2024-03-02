@@ -7,8 +7,9 @@ var middleware = require('../middlewares/requiredfields');
 
 
 router.post('/upload/banner',admin ,
+image.single('banner'),
 // middleware.imagefield,
- image.single('banner'), saveBanner);
+  saveBanner);
 
 
 module.exports = router;

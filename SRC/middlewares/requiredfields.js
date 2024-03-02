@@ -23,14 +23,11 @@ const emailfield = (req, res, next) => {
 }
 
 const imagefield = (req, res, next) => {
-    if(req.file){
-        next();
-    } else {
-        res.status(400).json({
-            error: true, 
-            message: 'Please provide all required fields', 
-            fields: ["banner_image"]});
+    if (!req.files) {
+        return res.status(400).json({error:true, msg:'No upload file provided in the POST request.'});
     }
+    console.log('passed imagefield middleware');
+    next();
 }
 
 const middleware = {

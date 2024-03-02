@@ -5,6 +5,7 @@ const saveBanner = async (req,res)=>{
         if (!req.file) {
             return res.status(400).json({error:true, error: 'No file uploaded.' });
           }
+        //   console.log(req.file);
           const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/jpg'];
           const { originalname, buffer, mimetype } = req.file;
 
