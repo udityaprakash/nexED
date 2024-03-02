@@ -1,11 +1,13 @@
 const express = require('express');
 const {createAllTables} = require('./SRC/database/query/createtable');
+const {connectmongoDB} = require('./SRC/database/connections/mongoDB');
 const app = express();
 require('dotenv').config();
 
 const port = process.env.PORT || 8080;
 
 createAllTables();
+connectmongoDB();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

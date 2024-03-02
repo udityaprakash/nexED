@@ -26,14 +26,30 @@ CREATE TABLE IF NOT EXISTS customer (
     created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );`;
 
+const classes = `CREATE TABLE IF NOT EXISTS class (
+  class_id uuid PRIMARY KEY,
+  class_name VARCHAR(64) NOT NULL,
+  subject VARCHAR(64),
+  section VARCHAR(64),
+  description VARCHAR(512),
+  user_id BIGINT REFERENCES customer(user_id),
+  banner_id bytea NOT NULL, 
+  created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`;
+
 async function createAllTables(){
-    const h = await client();
-    await h.run.query(User).then(()=>{
+    const cli = await client();
+    await cli.run.query(User).then(()=>{
       console.log('customer table created');
     }).catch((err)=>{
       console.log("table not created as : "+err);
     });
     
+    await cli.run.query(classes).then(()=>{
+      console.log('class table created');
+    }).catch((err)=>{
+      console.log("table not created as : "+err);
+    });
 }  
 
 module.exports = {createAllTables}
