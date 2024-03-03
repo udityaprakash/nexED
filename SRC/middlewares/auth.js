@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
+const { refreshUser } = require('../core/authorize');
 require('dotenv').config();
-function verify(token){
+async function verify(token){
         var token = token.split(' ')[1];
-        jwt.verify(token, process.env.JWT_SECRET, (err, authData) => {
+        await jwt.verify(token, process.env.JWT_SECRET, (err, authData) => {
             if(err){
                 if (err.name === 'TokenExpiredError') {
                     return {error:true,in:'tokenex', message: 'Token has expired'};
@@ -10,14 +11,13 @@ function verify(token){
                     return {error:true,in:'else', message: 'Invalid token'};
                   }
             }else{
-                return {error:false,data:authData};
+                return {error:false, data:authData, message:'Access Token is Active & can be used'};
             }
         });
 }
 
 let verifytoken =async (req, res, next) => {
-    const bearerHeader = req.headers['authorization'];
-    if(typeof bearerHeader !== 'undefined' && typeof refreshHeader !== 'undefined'){
+        const bearerHeader = req.headers['authorization'];
         let acc_res = verify(bearerHeader);
         if(acc_res.error){
             if(acc_res.in === 'tokenex'){
@@ -30,9 +30,19 @@ let verifytoken =async (req, res, next) => {
             req.tokendata = acc_res.data;
             next();
         }
-    }else{
-        res.status(401).json({error:true, re_login_required:false ,message: 'Bearer Token missing'});
-    }
 };
 
-module.exports = verifytoken;
+let isTokenexp = (req, res, next) => {
+        const bearerHeader = req.headers['authorization'];
+        let acc_res = verify(bearerHeader);
+        if(acc_res.error){
+            if(acc_res.in === 'tokenex'){
+                        next();
+            }else{
+                res.status(401).json({error:true, message: 'Invalid Authorization token Supplied'});
+            }
+        }else{
+            res.status(200).json({error:false, message: 'Token is Active & can be used'});
+        }
+}
+module.exports = {verifytoken, isTokenexp};

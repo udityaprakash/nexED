@@ -30,10 +30,20 @@ const imagefield = (req, res, next) => {
     next();
 }
 
+const authorization = (req, res, next) => {
+    const bearerHeader = req.headers['authorization'];
+    if(typeof bearerHeader !== 'undefined'){
+        next();
+    }else{
+        res.status(401).json({error:true, re_login_required:false ,message: 'Bearer Token missing'});
+    }
+}
+
 const middleware = {
     signup,
     emailfield,
-    imagefield
+    imagefield,
+    authorization
 };
 
 module.exports = middleware;

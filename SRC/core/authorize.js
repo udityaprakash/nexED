@@ -1,6 +1,5 @@
 const {client} = require('../../SRC/database/connections/postgreSQL');
 var jwt = require('jsonwebtoken');
-var {query} = require('../database/query/insert');
 require('dotenv').config();
 
 let createaccessToken = async (email) => {
@@ -23,7 +22,7 @@ const signup = async (req, res) => {
     }
 };
 
-let refreshUser = async (req,res) => {
+const generatetoken = async (req,res) => {
     const {email} = req.body;
     let cli = await client();
     let response = await cli.run.query(`Select * from customer where email = $1;`,[email]);
@@ -42,7 +41,7 @@ let refreshUser = async (req,res) => {
 
 const authhand = {
     signup,
-    refreshUser
+    generatetoken
 };
 
 module.exports = authhand;
