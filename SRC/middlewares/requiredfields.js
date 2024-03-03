@@ -38,12 +38,24 @@ const authorization = (req, res, next) => {
         res.status(401).json({error:true, re_login_required:false ,message: 'Bearer Token missing'});
     }
 }
+const classfields = (req, res, next) => {
+    const {classname, subject } = req.body;
+    if(classname && subject){
+        next();
+    } else {
+        res.status(400).json({
+            error: true, 
+            message: 'Please provide all required fields', 
+            fields: ["classname","subject",]});
+    }
+};
 
 const middleware = {
     signup,
     emailfield,
     imagefield,
-    authorization
+    authorization,
+    classfields
 };
 
 module.exports = middleware;

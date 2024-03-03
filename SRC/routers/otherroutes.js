@@ -6,6 +6,6 @@ const {createClass} = require('../core/classlogic');
 const middleware = require('../middlewares/requiredfields');
 
 router.get('/banner/:id',extractedPhoto);
-router.post('/class/create',middleware.authorization ,verifytoken, createClass);
+router.post('/create/class',middleware.authorization ,verifytoken, middleware.classfields,createClass);
 
 module.exports = router;
