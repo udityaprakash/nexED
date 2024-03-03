@@ -10,15 +10,15 @@ const signup = (req, res, next) => {
     }
 };
 
-const emailfield = (req, res, next) => {
-    const {email} = req.body;
-    if(email){
+const userfield = (req, res, next) => {
+    const {userid} = req.body;
+    if(userid){
         next();
     } else {
         res.status(400).json({
             error: true, 
             message: 'Please provide all required fields', 
-            fields: ["email"]});
+            fields: ["userid"]});
     }
 }
 
@@ -52,7 +52,7 @@ const classfields = (req, res, next) => {
 
 const middleware = {
     signup,
-    emailfield,
+    userfield,
     imagefield,
     authorization,
     classfields

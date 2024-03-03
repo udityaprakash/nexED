@@ -10,27 +10,31 @@ let createaccessToken = async (email) => {
 const signup = async (req, res) => {
     const {userid, profile_url, username, email} = req.body;
     let cli = await client();
-    console.log('fsda');
-    let response = await cli.run.query(`Insert into customer (user_id,username,profile_url,email) values($1,$2,$3,$4);`,[userid,username,profile_url,email]);
+    console.log('new signup in app');
+    let response = await cli.run.query(`Insert into customer (user_id,username,profile_url,email) values($1,$2,$3,$4) ON CONFLICT (email) DO NOTHING;`,[userid,username,profile_url,email]);
+    console.log(response);
     if(response.rowCount == 1){
         console.log(Date.now());
-        const accToken = await jwt.sign({email:email, createdAt:Date.now()}, process.env.JWT_SECRET,{expiresIn: process.env.EXPIRE_IN});
+        const accToken = await jwt.sign({email:email, user_id:userid, createdAt:Date.now()}, process.env.JWT_SECRET,{expiresIn: process.env.EXPIRE_IN});
         console.log(accToken);
         res.status(200).json({error:false,tokens:accToken,message: 'User is authorized'});
-    }else{
+    }else if(response.rowCount == 0){
+        res.status(200).json({error:true,message: 'User already exists'});
+    }
+    else{
         res.status(502).json({error:true,message: 'server database unreachable'});
     }
 };
 
 const generatetoken = async (req,res) => {
-    const {email} = req.body;
+    const {userid} = req.body;
     let cli = await client();
-    let response = await cli.run.query(`Select * from customer where email = $1;`,[email]);
+    let response = await cli.run.query(`Select * from customer where user_id = $1;`,[userid]);
     if(response.rows != 0){
-        const accToken = await jwt.sign({email:email, createdAt:Date.now()}, process.env.JWT_SECRET,{expiresIn: process.env.EXPIRE_IN});
+        const accToken = await jwt.sign({email:response.rows[0].email, user_id:userid, createdAt:Date.now()}, process.env.JWT_SECRET,{expiresIn: process.env.EXPIRE_IN});
         res.status(200).json({error:false,tokens:accToken,message: 'User is refreshed and authorized'});
     }else{
-        res.status(200).json({error:true,message: 'Invalid Email for refresh token'});
+        res.status(200).json({error:true,message: 'No such user found'});
     }
 
 }

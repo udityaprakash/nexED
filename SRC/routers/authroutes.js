@@ -7,7 +7,7 @@ const {isTokenexp} = require('../middlewares/auth');
 
 router.post('/user/Signup',required.signup, auth.signup);
 
-router.post('/user/RefreshLogin', required.authorization, required.emailfield, isTokenexp, auth.generatetoken);
+router.post('/user/RefreshLogin', required.authorization, required.userfield, isTokenexp, auth.generatetoken);
 
 
 module.exports = router;

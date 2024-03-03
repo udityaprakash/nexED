@@ -2,23 +2,26 @@ const jwt = require('jsonwebtoken');
 const { refreshUser } = require('../core/authorize');
 require('dotenv').config();
 async function verify(token){
-        var token = token.split(' ')[1];
-        await jwt.verify(token, process.env.JWT_SECRET, (err, authData) => {
+        var splitetoken = token.split(' ')[1];
+        var data;
+        await jwt.verify(splitetoken, process.env.JWT_SECRET, (err, authData) => {
             if(err){
                 if (err.name === 'TokenExpiredError') {
-                    return {error:true,in:'tokenex', message: 'Token has expired'};
+                    console.log('here:  ',err.name);
+                    data = {error:true,in:'tokenex', message: 'Token has expired'};
                   } else {
-                    return {error:true,in:'else', message: 'Invalid token'};
+                    data = {error:true,in:'else', message: 'Invalid token'};
                   }
             }else{
-                return {error:false, data:authData, message:'Access Token is Active & can be used'};
+                data = {error:false, data:authData, message:'Access Token is Active & can be used'};
             }
         });
+        return data;
 }
 
 let verifytoken =async (req, res, next) => {
         const bearerHeader = req.headers['authorization'];
-        let acc_res = verify(bearerHeader);
+        let acc_res =await verify(bearerHeader);
         if(acc_res.error){
             if(acc_res.in === 'tokenex'){
                         res.status(401).json({error:true, re_login_required:true, message: acc_res.message});
@@ -32,9 +35,10 @@ let verifytoken =async (req, res, next) => {
         }
 };
 
-let isTokenexp = (req, res, next) => {
+let isTokenexp =async (req, res, next) => {
         const bearerHeader = req.headers['authorization'];
-        let acc_res = verify(bearerHeader);
+        let acc_res = await verify(bearerHeader);
+        // console.log(acc_res);
         if(acc_res.error){
             if(acc_res.in === 'tokenex'){
                         next();
