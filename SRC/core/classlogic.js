@@ -24,9 +24,9 @@ const createClass =async (req, res)=>{
             section ? section : '',
             description ? description : '',
             req.tokendata.email,
-            bannerid
+            bannerid.toString()
         ]);
-        console.log(response);
+        if(response.error) res.status(500).json({error:true, message:"Some Internal Server Error"});
         res.status(200).json({error:false, message:"class created successfully"});
 
     }catch(e){

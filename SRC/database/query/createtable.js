@@ -34,7 +34,7 @@ const classes = `CREATE TABLE IF NOT EXISTS class (
   description VARCHAR(512),
   can_join BOOLEAN DEFAULT TRUE,
   email VARCHAR(255) REFERENCES customer(email),
-  banner_id bytea NOT NULL, 
+  banner_id VARCHAR(64) NOT NULL, 
   created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );`;
 
