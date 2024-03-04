@@ -35,7 +35,33 @@ const createClass =async (req, res)=>{
     }
 };
 
-const updateClass = (req, res)=>{
+const updateClass =async (req, res)=>{
+    try{
+        const {classid, classname, subject, section, description} = req.body;
+        let cli = await client();
+        let response =await cli.run.query(`update class set class_name=$1, subject=$2, section=$3, description=$4 where class_id=$5`,[
+            classname,
+            subject,
+            section ? section : '',
+            description ? description : '',
+            classid
+        ]);
+        if(response.error) {
+            res.status(500).json({error:true, response:response, message:"Some Internal Server Error"});
+        }else{
+
+            if(response.rowCount != 0) {
+                res.status(200).json({error:false, response:response, message:"class updated successfully"});
+            }else{
+                res.status(400).json({error:true, response:response, message:"class not found"});
+    
+            }
+
+        }
+
+    }catch(e){
+        res.status(500).json({error:true,err:e, message:"internal server error"});
+    }
 
 };
 

@@ -50,12 +50,25 @@ const classfields = (req, res, next) => {
     }
 };
 
+const classid = (req, res, next) => {
+    const {classid} = req.body;
+    if(classid){
+        next();
+    } else {
+        res.status(400).json({
+            error: true, 
+            message: 'Please provide all required fields', 
+            fields: ["classid"]});
+    }
+};
+
 const middleware = {
     signup,
     userfield,
     imagefield,
     authorization,
-    classfields
+    classfields,
+    classid
 };
 
 module.exports = middleware;
