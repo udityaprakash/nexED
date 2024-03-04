@@ -39,12 +39,13 @@ const updateClass =async (req, res)=>{
     try{
         const {classid, classname, subject, section, description} = req.body;
         let cli = await client();
-        let response =await cli.run.query(`update class set class_name=$1, subject=$2, section=$3, description=$4 where class_id=$5`,[
+        let response =await cli.run.query(`update class set class_name=$1, subject=$2, section=$3, description=$4 where class_id=$5 and email=$6`,[
             classname,
             subject,
             section ? section : '',
             description ? description : '',
-            classid
+            classid,
+            req.tokendata.email
         ]);
         if(response.error) {
             res.status(500).json({error:true, response:response, message:"Some Internal Server Error"});
@@ -65,4 +66,19 @@ const updateClass =async (req, res)=>{
 
 };
 
-module.exports = {createClass, updateClass}
+const classdetatils =async (req, res)=>{
+    try{
+        const {classid} = req.body;
+        let cli = await client();
+        let response =await cli.run.query(`select * from class where class_id=$1`,[classid]);
+        if(response.error) {
+            res.status(500).json({error:true, message:"Some Internal Server Error"});
+        }
+        res.status(200).json({error:false, response:response.rows[0], message:"class details fetched successfully"});
+    }catch(e){
+        res.status(500).json({error:true, response:e, message:"internal server error"});
+    
+    }
+}
+
+module.exports = {createClass, updateClass, classdetatils}
