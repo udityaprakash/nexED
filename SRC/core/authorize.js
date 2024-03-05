@@ -27,9 +27,9 @@ const signup = async (req, res) => {
 };
 
 const generatetoken = async (req,res) => {
-    const {userid} = req.body;
+    const {userid, email} = req.body;
     let cli = await client();
-    let response = await cli.run.query(`Select * from customer where user_id = $1;`,[userid]);
+    let response = await cli.run.query(`Select * from customer where user_id = $1 and email = $2 ;`,[userid, email]);
     if(response.rows != 0){
         const accToken = await jwt.sign({email:response.rows[0].email, user_id:userid, createdAt:Date.now()}, process.env.JWT_SECRET,{expiresIn: process.env.EXPIRE_IN});
         res.status(200).json({error:false,tokens:accToken,message: 'User is refreshed and authorized'});

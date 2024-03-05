@@ -11,14 +11,14 @@ const signup = (req, res, next) => {
 };
 
 const userfield = (req, res, next) => {
-    const {userid} = req.body;
-    if(userid){
+    const {userid , email} = req.body;
+    if(userid && email){
         next();
     } else {
         res.status(400).json({
             error: true, 
             message: 'Please provide all required fields', 
-            fields: ["userid"]});
+            fields: ["userid", "email"]});
     }
 }
 
