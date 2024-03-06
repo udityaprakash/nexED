@@ -33,10 +33,17 @@ const classes = `CREATE TABLE IF NOT EXISTS class (
   section VARCHAR(64),
   description VARCHAR(512),
   can_join BOOLEAN DEFAULT TRUE,
+  join_code VARCHAR(64) UNIQUE,
   email VARCHAR(255) REFERENCES customer(email),
-  banner_id VARCHAR(64) NOT NULL, 
+  banner_id VARCHAR(64) NOT NULL,
   created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );`;
+
+const enrolement = `CREATE TABLE IF NOT EXISTS enrolement (
+  class_id uuid REFERENCES class(class_id),
+  email VARCHAR(255) REFERENCES customer(email),
+  joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `;
 
 async function createAllTables(){
     const cli = await client();
