@@ -62,13 +62,26 @@ const classid = (req, res, next) => {
     }
 };
 
+const join_code = (req, res, next) => {
+    const {join_code} = req.body;
+    if(join_code){
+        next();
+    } else {
+        res.status(400).json({
+            error: true, 
+            message: 'Please provide all required fields', 
+            fields: ["join_code"]});
+    }
+};
+
 const middleware = {
     signup,
     userfield,
     imagefield,
     authorization,
     classfields,
-    classid
+    classid,
+    join_code
 };
 
 module.exports = middleware;
