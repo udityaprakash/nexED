@@ -36,14 +36,23 @@ const classes = `CREATE TABLE IF NOT EXISTS class (
   join_code VARCHAR(7) UNIQUE NOT NULL,
   email VARCHAR(255) REFERENCES customer(email),
   banner_id VARCHAR(64) NOT NULL,
-  created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );`;
 
-const enrolement = `CREATE TABLE IF NOT EXISTS enrolement (
+const enrolement = `CREATE TABLE IF NOT EXISTS enrollment (
   class_id uuid REFERENCES class(class_id),
   email VARCHAR(255) REFERENCES customer(email),
   joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
   `;
+
+const classResource = `CREATE TABLE IF NOT EXISTS ficher (
+  ficher_id uuid PRIMARY KEY,
+  class_id uuid REFERENCES class(class_id),
+  title VARCHAR(64),
+  description VARCHAR(512),
+  mediaAsset_ids text[],
+  created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`;  
 
 async function createAllTables(){
     const cli = await client();
@@ -60,9 +69,15 @@ async function createAllTables(){
     });
 
     await cli.run.query(enrolement).then(()=>{
-      console.log('Enrolment table created');
+      console.log('Enrollment table created');
     }).catch((err)=>{
       console.log("Enrollment table not created as : "+err);
+    });
+
+    await cli.run.query(classResource).then(()=>{
+      console.log('Ficher table created');
+    }).catch((err)=>{
+      console.log("Ficher table not created as : "+err);
     });
 }  
 

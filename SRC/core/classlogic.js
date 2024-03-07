@@ -117,14 +117,14 @@ const enroll = async(req, res)=>{
                 if(response1.rows[0].email == email){
                     res.status(400).json({error:true, message:"You cannot enroll in your own class"});
                 }else{
-                    let response2 =await cli.run.query(`select * from enrolement where email = $1 and class_id = $2`,[email, response1.rows[0].class_id]);
+                    let response2 =await cli.run.query(`select * from enrollment where email = $1 and class_id = $2`,[email, response1.rows[0].class_id]);
                     
                     if(response2.error) {
                         res.status(500).json({error:true, message:"Some Internal Server Error"});
                     }else if(response2.rowCount != 0){
                         res.status(400).json({error:true, message:"You are already enrolled in this class"});
                     }else{
-                        let response3 =await cli.run.query(`Insert into enrolement (class_id, email) values($1,$2)`,[response1.rows[0].class_id, email]);
+                        let response3 =await cli.run.query(`Insert into enrollment (class_id, email) values($1,$2)`,[response1.rows[0].class_id, email]);
                         if(response3.error) {
                             res.status(500).json({error:true, message:"Some Internal Server Error"});
                         }
