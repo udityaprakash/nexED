@@ -4,7 +4,7 @@ const {ficherAsset} = require('../middlewares/fileprocess');
 const type = require('../middlewares/datatype');
 // const {extractedPhoto} = require('../core/Admin/Storebanner');
 const {verifytoken} = require('../middlewares/auth');
-const {createClass, updateClass, classdetatils, enroll,fichercontent, uploadFicherAssest} = require('../core/classlogic');
+const {createClass, updateClass, classdetatils, enroll,fichercontent, uploadFicherAssest, uploadfichercomment} = require('../core/classlogic');
 const middleware = require('../middlewares/requiredfields');
 const check = require('../middlewares/chechauthentic');
 
@@ -23,7 +23,9 @@ router.post('/join', authAndverfication, middleware.join_code, enroll);
 router.post('/ficher/upload/asset', authAndverfication, ficherAsset.single('attachment'), middleware.filefield,  type.filemeametypechecker,
 uploadFicherAssest);
 
-router.post('/ficher/content', authAndverfication, middleware.classid, middleware.fichercontent, check.authenticity,fichercontent);
+router.post('/ficher/content', authAndverfication, middleware.classid, middleware.fichercontent, check.isclasscreater, fichercontent);
+
+router.post('/ficher/comment', authAndverfication, middleware.fichercomment, check.isstudentjoined, uploadfichercomment);
 
 router.all('*', (req, res) => {
     res.status(404).json({error:true, message: 'Page not found'});

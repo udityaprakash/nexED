@@ -168,18 +168,19 @@ const fichercontent = async(req, res)=>{
 
 const uploadfichercomment = async(req, res)=>{
     try{
-        const {ficher_id, comment} = req.body;
+        const {ficherid, comment} = req.body;
         let cli = await client();
         let response =await cli.run.query(`Insert into fichercomment (comment_id, ficher_id, email, comment) values($1,$2,$3,$4)`,[
             uuidv4(),
-            ficher_id,
+            ficherid,
             req.tokendata.email,
             comment
         ]);
-        if(response.error) {
-            res.status(500).json({error:true, message:"Some Internal Server Error"});
+        if(response.rowCount != 0) {
+            res.status(200).json({error:false, message:"comment added successfully"});
+        }else{
+            res.status(500).json({error:true, response:response, message:"Some Internal Server Error"});
         }
-        res.status(200).json({error:false, message:"comment added successfully"});
     }catch(e){
         res.status(500).json({error:true, response:e, message:"internal server error"});
     }
@@ -219,4 +220,4 @@ const uploadFicherAssest = async(req, res)=>{
     }
 }
 
-module.exports = {createClass, updateClass, classdetatils , enroll, fichercontent, uploadFicherAssest}
+module.exports = {createClass, updateClass, classdetatils , enroll, fichercontent, uploadFicherAssest, uploadfichercomment}

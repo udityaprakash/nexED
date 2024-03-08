@@ -56,7 +56,7 @@ const classResource = `CREATE TABLE IF NOT EXISTS ficher (
   mediaAsset_ids text[],
   created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`;  
 
-const fichercomment = `CREATE TABLE IF NOT EXISTS ficher (
+const fichercomment = `CREATE TABLE IF NOT EXISTS fichercomment (
     comment_id uuid PRIMARY KEY,
     ficher_id uuid REFERENCES ficher(ficher_id) NOT NULL,
     email VARCHAR(255) REFERENCES customer(email) NOT NULL,
@@ -64,6 +64,8 @@ const fichercomment = `CREATE TABLE IF NOT EXISTS ficher (
     created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`;
 
 async function createAllTables(){
+  try{
+
     const cli = await client();
     // await cli.run.query(createDB).then(()=>{
     //   console.log('DB created');
@@ -100,6 +102,9 @@ async function createAllTables(){
     }).catch((err)=>{
       console.log("Fichercomment table not created as : "+err);
     });
+  }catch(e){
+    console.log('Error in creating tables:-',e);
+  }
 }  
 
 module.exports = {createAllTables}

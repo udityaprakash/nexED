@@ -101,6 +101,44 @@ const fichercontent = (req, res, next) => {
     }
 };
 
+const ficherid = (req, res, next) => {
+    const {ficherid} = req.body;
+    if(ficherid){
+        if(isValidUUIDv4(ficherid)){
+            next();
+        }else{
+            res.status(400).json({
+                error: true, 
+                message: 'Invalid ficherid', 
+                fields: ["ficherid"]});
+        }
+    } else {
+        res.status(400).json({
+            error: true, 
+            message: 'Please provide all required fields', 
+            fields: ["ficherid"]});
+    }
+};
+
+const fichercomment = (req, res, next) => {
+    const {ficherid, comment} = req.body;
+    if(ficherid && comment){
+        if(isValidUUIDv4(ficherid)){
+            next();
+        }else{
+            res.status(400).json({
+                error: true, 
+                message: 'Invalid ficherid', 
+                fields: ["ficherid"]});
+        }
+    } else {
+        res.status(400).json({
+            error: true, 
+            message: 'Please provide all required fields', 
+            fields: ["ficherid", "comment"]});
+    }
+}
+
 const middleware = {
     signup,
     userfield,
@@ -109,7 +147,9 @@ const middleware = {
     classfields,
     classid,
     join_code,
-    fichercontent
+    ficherid,
+    fichercontent,
+    fichercomment
 };
 
 module.exports = middleware;
