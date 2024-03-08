@@ -25,7 +25,7 @@ uploadFicherAssest);
 
 router.post('/ficher/content', authAndverfication, middleware.classid, middleware.fichercontent, check.isclasscreater, fichercontent);
 
-router.post('/ficher/comment', authAndverfication, middleware.fichercomment, check.isstudentjoined, uploadfichercomment);
+router.post('/ficher/comment', authAndverfication, middleware.fichercomment, check.iseligibleforcomment, uploadfichercomment);
 
 router.all('*', (req, res) => {
     res.status(404).json({error:true, message: 'Page not found'});

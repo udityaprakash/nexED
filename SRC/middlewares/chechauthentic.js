@@ -15,7 +15,7 @@ const isclasscreater =async (req, res, next) => {
     }
 };
 
-const isstudentjoined = async (req, res, next) => {
+const iseligibleforcomment = async (req, res, next) => {
     try{
 
         let cli = await client();
@@ -23,7 +23,13 @@ const isstudentjoined = async (req, res, next) => {
         if(response.rows.length > 0){
             next();
         }else{
-            res.status(401).json({error:true, message: 'Unauthorized Access for Class Content Creation'});
+            let result =await cli.run.query(`SELECT  ficher.title, class.email FROM class INNER JOIN ficher ON ficher.class_id = class.class_id WHERE class.email = $1;`,[req.tokendata.email]);
+            if(result.rows.length > 0){
+                next();
+            }else{
+
+                res.status(401).json({error:true, message: 'Unauthorized Access for Class Content Creation'});
+            }
         
         }
     }catch(e){
@@ -31,9 +37,10 @@ const isstudentjoined = async (req, res, next) => {
     }
 };
 
+
 const check = {
     isclasscreater,
-    isstudentjoined
+    iseligibleforcomment
 };
 
 module.exports = check;
