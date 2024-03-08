@@ -143,8 +143,8 @@ const enroll = async(req, res)=>{
     }
 }
 
-//check here
-const addficher = async(req, res)=>{
+//updated here
+const fichercontent = async(req, res)=>{
     try{
         const {classid, title, description, mediaAsset_ids} = req.body;
         let cli = await client();
@@ -155,12 +155,14 @@ const addficher = async(req, res)=>{
             description,
             mediaAsset_ids
         ]);
-        if(response.error) {
-            res.status(500).json({error:true, message:"Some Internal Server Error"});
+        if(response.rowCount!=0) {
+            res.status(200).json({error:false, message:"Class Content Added Successfully"});
+        }else{
+
+            res.status(500).json({error:true,response:response, message:"Some Internal Server Error"});
         }
-        res.status(200).json({error:false, message:"attachment added successfully"});
     }catch(e){
-        res.status(500).json({error:true, response:e, message:"internal server error"});
+        res.status(500).json({error:true, response:e, message:"Internal Server Error"});
     }
 }
 
@@ -183,7 +185,7 @@ const uploadfichercomment = async(req, res)=>{
     }
 };
 
-//check complete
+
 const uploadFicherAssest = async(req, res)=>{
     try{
 
@@ -217,4 +219,4 @@ const uploadFicherAssest = async(req, res)=>{
     }
 }
 
-module.exports = {createClass, updateClass, classdetatils , enroll, uploadFicherAssest}
+module.exports = {createClass, updateClass, classdetatils , enroll, fichercontent, uploadFicherAssest}

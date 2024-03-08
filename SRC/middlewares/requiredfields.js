@@ -1,3 +1,8 @@
+function isValidUUIDv4(uuid) {
+    const uuidv4Pattern = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
+    return uuidv4Pattern.test(uuid);
+}
+
 const signup = (req, res, next) => {
     const {userid, profile_url, username, email} = req.body;
     if(userid && profile_url && username && email){
@@ -55,7 +60,15 @@ const classfields = (req, res, next) => {
 const classid = (req, res, next) => {
     const {classid} = req.body;
     if(classid){
-        next();
+        if(isValidUUIDv4(classid)){
+
+            next();
+        }else{
+            res.status(400).json({
+                error: true, 
+                message: 'Invalid classid', 
+                fields: ["classid"]});
+        }
     } else {
         res.status(400).json({
             error: true, 
@@ -76,6 +89,18 @@ const join_code = (req, res, next) => {
     }
 };
 
+const fichercontent = (req, res, next) => {
+    const {title, description, mediaAsset_ids} = req.body;
+    if(title && description && mediaAsset_ids){
+        next();
+    } else {
+        res.status(400).json({
+            error: true, 
+            message: 'Please provide all required fields', 
+            fields: ["title", "description", "mediaAsset_ids"]});
+    }
+};
+
 const middleware = {
     signup,
     userfield,
@@ -83,7 +108,8 @@ const middleware = {
     authorization,
     classfields,
     classid,
-    join_code
+    join_code,
+    fichercontent
 };
 
 module.exports = middleware;
