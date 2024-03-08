@@ -22,12 +22,14 @@ const userfield = (req, res, next) => {
     }
 }
 
-const imagefield = (req, res, next) => {
-    if (!req.files) {
+const filefield = (req, res, next) => {
+    if (!req.file) {
         return res.status(400).json({error:true, msg:'No upload file provided in the POST request.'});
+    }else{
+        
+        next();
+
     }
-    console.log('passed imagefield middleware');
-    next();
 }
 
 const authorization = (req, res, next) => {
@@ -77,7 +79,7 @@ const join_code = (req, res, next) => {
 const middleware = {
     signup,
     userfield,
-    imagefield,
+    filefield,
     authorization,
     classfields,
     classid,

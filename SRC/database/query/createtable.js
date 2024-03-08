@@ -16,6 +16,8 @@ async function Retry(query) {
     }
   }
 
+const createDB = `create database if not exists GclassroomDB;`;  
+
 const User = `
 CREATE TABLE IF NOT EXISTS customer (
     user_id BIGINT PRIMARY KEY,
@@ -54,8 +56,21 @@ const classResource = `CREATE TABLE IF NOT EXISTS ficher (
   mediaAsset_ids text[],
   created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`;  
 
+const fichercomment = `CREATE TABLE IF NOT EXISTS ficher (
+    comment_id uuid PRIMARY KEY,
+    ficher_id uuid REFERENCES ficher(ficher_id) NOT NULL,
+    email VARCHAR(255) REFERENCES customer(email) NOT NULL,
+    comment VARCHAR(512) NOT NULL,
+    created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`;
+
 async function createAllTables(){
     const cli = await client();
+    // await cli.run.query(createDB).then(()=>{
+    //   console.log('DB created');
+    // }).catch((err)=>{
+    //   console.log("DB not created as : "+err);
+    // });
+
     await cli.run.query(User).then(()=>{
       console.log('customer table created');
     }).catch((err)=>{
@@ -78,6 +93,12 @@ async function createAllTables(){
       console.log('Ficher table created');
     }).catch((err)=>{
       console.log("Ficher table not created as : "+err);
+    });
+
+    await cli.run.query(fichercomment).then(()=>{
+      console.log('Fichercomment table created');
+    }).catch((err)=>{
+      console.log("Fichercomment table not created as : "+err);
     });
 }  
 

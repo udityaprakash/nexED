@@ -15,7 +15,7 @@ var client =async () => {
                   },
             });
             var client = await poll.connect();
-            console.log('Database query executed...');
+            // console.log('Database query executed...');
             return {error:false,status:0,run:client};
         }catch(err){
             console.error('Database connection failed');

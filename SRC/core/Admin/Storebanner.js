@@ -1,5 +1,5 @@
 const bannerschema = require('../../database/schema/banner');
-const {compressor} = require('../../middlewares/imageprocess');
+const {compressor} = require('../../middlewares/fileprocess');
 const saveBanner = async (req,res)=>{
     try{
         if (!req.file) {

@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const bannerdb = require('../database/schema/banner');
 const {client} = require('../database/connections/postgreSQL');
+const mediaAssest = require('../database/schema/mediaAsset');
 
 function classcodegenerator(){
     let code = '';
@@ -142,4 +143,78 @@ const enroll = async(req, res)=>{
     }
 }
 
-module.exports = {createClass, updateClass, classdetatils , enroll}
+//check here
+const addficher = async(req, res)=>{
+    try{
+        const {classid, title, description, mediaAsset_ids} = req.body;
+        let cli = await client();
+        let response =await cli.run.query(`Insert into ficher (ficher_id, class_id, title, description, mediaAsset_ids) values($1,$2,$3,$4,$5)`,[
+            uuidv4(),
+            classid,
+            title,
+            description,
+            mediaAsset_ids
+        ]);
+        if(response.error) {
+            res.status(500).json({error:true, message:"Some Internal Server Error"});
+        }
+        res.status(200).json({error:false, message:"attachment added successfully"});
+    }catch(e){
+        res.status(500).json({error:true, response:e, message:"internal server error"});
+    }
+}
+
+const uploadfichercomment = async(req, res)=>{
+    try{
+        const {ficher_id, comment} = req.body;
+        let cli = await client();
+        let response =await cli.run.query(`Insert into fichercomment (comment_id, ficher_id, email, comment) values($1,$2,$3,$4)`,[
+            uuidv4(),
+            ficher_id,
+            req.tokendata.email,
+            comment
+        ]);
+        if(response.error) {
+            res.status(500).json({error:true, message:"Some Internal Server Error"});
+        }
+        res.status(200).json({error:false, message:"comment added successfully"});
+    }catch(e){
+        res.status(500).json({error:true, response:e, message:"internal server error"});
+    }
+};
+
+//check complete
+const uploadFicherAssest = async(req, res)=>{
+    try{
+
+        const store = new mediaAssest({
+            attachment: {
+                name: req.file.originalname,
+                data: req.file.buffer,
+                contentType: req.file.mimetype,
+            }
+        });
+
+        const response = await store.save();
+        if(response) {
+            res.status(200).json(
+                {
+                    error:false,response:{
+                        mediaAsset_id: response._id,
+                        message:"attachment uploaded successfully"
+                    
+                    }, 
+                    message:"Uploaded Successfully"
+                });
+        }else{
+            res.status(500).json({error:true, message:"Some Internal Server Error"});
+
+        }
+        
+        
+    }catch(e){
+        res.status(500).json({error:true, response:e, message:"Some Internal server error"});
+    }
+}
+
+module.exports = {createClass, updateClass, classdetatils , enroll, uploadFicherAssest}
