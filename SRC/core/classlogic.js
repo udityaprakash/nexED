@@ -106,7 +106,7 @@ const enroll = async(req, res)=>{
         }else{
 
             let cli = await client();
-            let response1 =await cli.run.query(`select * from class where join_code = $1`,[join_code]);
+            let response1 =await cli.run.query(`select * from class where join_code = $1 and can_join = $2`,[join_code, true]);
     
             if (response1.error) {
     
