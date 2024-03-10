@@ -220,4 +220,28 @@ const uploadFicherAssest = async(req, res)=>{
     }
 }
 
-module.exports = {createClass, updateClass, classdetatils , enroll, fichercontent, uploadFicherAssest, uploadfichercomment}
+const resetjoincode = async(req, res)=>{
+    try{
+        const {classid} = req.body;
+        let cli = await client();
+        let classcode = classcodegenerator();
+        let response =await cli.run.query(`update class set join_code=$1 where class_id=$2 and email=$3`,[
+            classcode,
+            classid,
+            req.tokendata.email
+        ]);
+        if(response.error) {
+            res.status(500).json({error:true, message:"Some Internal Server Error"});
+        }else{
+            if(response.rowCount != 0) {
+                res.status(200).json({error:false, NewClassCode:classcode, message:"class updated successfully"});
+            }else{
+                res.status(400).json({error:true, message:"No such class exists"});
+            }
+        }
+    }catch(e){
+        res.status(500).json({error:true, response:e, message:"internal server error"});
+    }
+};
+
+module.exports = {createClass, updateClass, classdetatils , enroll, fichercontent, uploadFicherAssest, uploadfichercomment, resetjoincode}

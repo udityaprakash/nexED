@@ -4,13 +4,11 @@ const {ficherAsset} = require('../middlewares/fileprocess');
 const type = require('../middlewares/datatype');
 // const {extractedPhoto} = require('../core/Admin/Storebanner');
 const {verifytoken} = require('../middlewares/auth');
-const {createClass, updateClass, classdetatils, enroll,fichercontent, uploadFicherAssest, uploadfichercomment} = require('../core/classlogic');
+const {createClass, updateClass, classdetatils, enroll,fichercontent, uploadFicherAssest, uploadfichercomment, resetjoincode} = require('../core/classlogic');
 const middleware = require('../middlewares/requiredfields');
 const check = require('../middlewares/chechauthentic');
 
 const authAndverfication =[middleware.authorization, verifytoken];
-
-// router.get('/banner/:id',extractedPhoto);
 
 router.post('/create', authAndverfication, middleware.classfields, createClass);
 
@@ -19,6 +17,9 @@ router.patch('/update', authAndverfication, middleware.classfields, middleware.c
 router.post('/details', authAndverfication, middleware.classid, classdetatils);
 
 router.post('/join', authAndverfication, middleware.join_code, enroll);
+
+//reset the join code
+router.post('/join/reset', authAndverfication,middleware.classid, check.isclasscreater,resetjoincode);
 
 router.post('/ficher/upload/asset', authAndverfication, ficherAsset.single('attachment'), middleware.filefield,  type.filemeametypechecker,
 uploadFicherAssest);
