@@ -155,11 +155,20 @@ const fichercontent = async(req, res)=>{
             description,
             mediaAsset_ids
         ]);
-        if(response.rowCount!=0) {
-            res.status(200).json({error:false, message:"Class Content Added Successfully"});
+
+        await cli.run.query(`update class set updated_At = current_timestamp where class_id=$2`,[
+            classid
+        ]);
+        if(response.error) {
+            res.status(500).json({error:true, message:"Some Internal Server Error"});
         }else{
 
-            res.status(500).json({error:true,response:response, message:"Some Internal Server Error"});
+            if(response.rowCount!=0) {
+                res.status(200).json({error:false, message:"Class Content Added Successfully"});
+            }else{
+    
+                res.status(500).json({error:true,response:response, message:"Some Internal Server Error"});
+            }
         }
     }catch(e){
         res.status(500).json({error:true, response:e, message:"Internal Server Error"});
