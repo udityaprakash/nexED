@@ -28,7 +28,7 @@ const iseligibleforcomment = async (req, res, next) => {
                 next();
             }else{
 
-                res.status(401).json({error:true, message: 'Unauthorized Access for Class Content Creation'});
+                res.status(401).json({error:true, message: 'Unauthorized Access for Class'});
             }
         
         }

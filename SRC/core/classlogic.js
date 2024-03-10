@@ -106,7 +106,7 @@ const enroll = async(req, res)=>{
         }else{
 
             let cli = await client();
-            let response1 =await cli.run.query(`select * from class where join_code = $1`,[join_code]);
+            let response1 =await cli.run.query(`select * from class where join_code = $1 and can_join = $2`,[join_code, true]);
     
             if (response1.error) {
     
@@ -155,11 +155,20 @@ const fichercontent = async(req, res)=>{
             description,
             mediaAsset_ids
         ]);
-        if(response.rowCount!=0) {
-            res.status(200).json({error:false, message:"Class Content Added Successfully"});
+
+        await cli.run.query(`update class set updated_At = current_timestamp where class_id=$2`,[
+            classid
+        ]);
+        if(response.error) {
+            res.status(500).json({error:true, message:"Some Internal Server Error"});
         }else{
 
-            res.status(500).json({error:true,response:response, message:"Some Internal Server Error"});
+            if(response.rowCount!=0) {
+                res.status(200).json({error:false, message:"Class Content Added Successfully"});
+            }else{
+    
+                res.status(500).json({error:true,response:response, message:"Some Internal Server Error"});
+            }
         }
     }catch(e){
         res.status(500).json({error:true, response:e, message:"Internal Server Error"});
@@ -220,4 +229,28 @@ const uploadFicherAssest = async(req, res)=>{
     }
 }
 
-module.exports = {createClass, updateClass, classdetatils , enroll, fichercontent, uploadFicherAssest, uploadfichercomment}
+const resetjoincode = async(req, res)=>{
+    try{
+        const {classid} = req.body;
+        let cli = await client();
+        let classcode = classcodegenerator();
+        let response =await cli.run.query(`update class set join_code=$1 where class_id=$2 and email=$3`,[
+            classcode,
+            classid,
+            req.tokendata.email
+        ]);
+        if(response.error) {
+            res.status(500).json({error:true, message:"Some Internal Server Error"});
+        }else{
+            if(response.rowCount != 0) {
+                res.status(200).json({error:false, NewClassCode:classcode, message:"class updated successfully"});
+            }else{
+                res.status(400).json({error:true, message:"No such class exists"});
+            }
+        }
+    }catch(e){
+        res.status(500).json({error:true, response:e, message:"internal server error"});
+    }
+};
+
+module.exports = {createClass, updateClass, classdetatils , enroll, fichercontent, uploadFicherAssest, uploadfichercomment, resetjoincode}
