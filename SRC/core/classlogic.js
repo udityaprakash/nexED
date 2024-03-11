@@ -143,7 +143,6 @@ const enroll = async(req, res)=>{
     }
 }
 
-//updated here
 const fichercontent = async(req, res)=>{
     try{
         const {classid, title, description, mediaAsset_ids} = req.body;

@@ -60,7 +60,7 @@
         },
         {
             "name": "User-04",
-            "usertype": "access-user",
+            "usertype": "prime-user",
             "usercode":"UNL",
             "can_buy":true,
             "price":"9989.00",
