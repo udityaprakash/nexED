@@ -7,10 +7,11 @@ const {verifytoken} = require('../middlewares/auth');
 const {createClass, updateClass, classdetatils, enroll,fichercontent, uploadFicherAssest, uploadfichercomment, resetjoincode} = require('../core/classlogic');
 const middleware = require('../middlewares/requiredfields');
 const check = require('../middlewares/chechauthentic');
+const set = require('../middlewares/set');
 
-const authAndverfication =[middleware.authorization, verifytoken];
+const authAndverfication =[middleware.authorization, set.usertype, verifytoken];
 
-router.post('/create', authAndverfication, middleware.classfields, createClass);
+router.post('/create', authAndverfication, middleware.classfields,check.usertype, createClass);
 
 router.patch('/update', authAndverfication, middleware.classfields, middleware.classid, updateClass);
 
