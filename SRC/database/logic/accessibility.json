@@ -2,7 +2,7 @@
     "name": "types-of-user",
     "version": "2.1.1",
     "app_users":{
-        "admin":{
+        "UNL-239":{
             "name": "User-00",
             "usertype": "admin",
             "usercode":"UNL-239",
@@ -12,12 +12,10 @@
             "currency":"INR",
             "validity":{
                 "timelimit":"unlimited",
-                "days":365,
-                "months":12,
-                "years":100
+                "days":365
             }
         },
-        "default-user":{
+        "U00":{
             "name": "User-01",
             "usertype": "default-user",
             "usercode":"U00",
@@ -32,7 +30,7 @@
                 "years":50
             }
         },
-        "pro-user":{
+        "U30":{
             "name": "User-02",
             "usertype": "pro-user",
             "usercode":"U30",
@@ -47,7 +45,7 @@
                 "years":0
             }
         },
-        "premium-user":{
+        "U365":{
             "name": "User-03",
             "usertype": "premium-user",
             "usercode":"U365",
@@ -62,7 +60,7 @@
                 "years":1
             }
         },
-        "prime-user":{
+        "UNL":{
             "name": "User-04",
             "usertype": "prime-user",
             "usercode":"UNL",

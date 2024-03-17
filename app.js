@@ -12,6 +12,8 @@ connectmongoDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+
 app.use('/admin', require('./SRC/routers/adminroute'));
 app.use('/auth', require('./SRC/routers/authroutes'));
 app.use('/class', require('./SRC/routers/classroute'));
