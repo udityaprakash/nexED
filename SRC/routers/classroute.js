@@ -9,9 +9,9 @@ const middleware = require('../middlewares/requiredfields');
 const check = require('../middlewares/chechauthentic');
 const set = require('../middlewares/set');
 
-const authAndverfication =[middleware.authorization, set.usertype, verifytoken];
+const authAndverfication =[middleware.authorization, verifytoken];
 
-router.post('/create', authAndverfication, middleware.classfields,check.usertype, createClass);
+router.post('/create', authAndverfication,  middleware.classfields, check.here, set.usertype_and_nclass, createClass);
 
 router.patch('/update', authAndverfication, middleware.classfields, middleware.classid, updateClass);
 
