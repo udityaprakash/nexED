@@ -1,25 +1,25 @@
 {
     "name": "types-of-user",
-    "version": "1.0.0",
-    "app_users":[
-        {
+    "version": "2.1.1",
+    "app_users":{
+        "UNL-239":{
             "name": "User-00",
             "usertype": "admin",
             "usercode":"UNL-239",
+            "class_limit":false,
             "can_buy":false,
             "price":"100000.00",
             "currency":"INR",
             "validity":{
                 "timelimit":"unlimited",
-                "days":365,
-                "months":12,
-                "years":100
+                "days":365
             }
         },
-        {
+        "U00":{
             "name": "User-01",
             "usertype": "default-user",
             "usercode":"U00",
+            "class_limit":2,
             "can_buy":false,
             "price":"0.00",
             "currency":"INR",
@@ -30,10 +30,11 @@
                 "years":50
             }
         },
-        {
+        "U30":{
             "name": "User-02",
             "usertype": "pro-user",
             "usercode":"U30",
+            "class_limit":10,
             "can_buy":true,
             "price":"49.00",
             "currency":"INR",
@@ -44,10 +45,11 @@
                 "years":0
             }
         },
-        {
+        "U365":{
             "name": "User-03",
             "usertype": "premium-user",
             "usercode":"U365",
+            "class_limit":100,
             "can_buy":true,
             "price":"499.00",
             "currency":"INR",
@@ -58,10 +60,11 @@
                 "years":1
             }
         },
-        {
+        "UNL":{
             "name": "User-04",
-            "usertype": "access-user",
+            "usertype": "prime-user",
             "usercode":"UNL",
+            "class_limit":1000,
             "can_buy":true,
             "price":"9989.00",
             "currency":"INR",
@@ -72,6 +75,5 @@
                 "years":50
             }
         }
-
-    ]
+    }
 }

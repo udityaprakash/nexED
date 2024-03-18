@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 const bannerdb = require('../database/schema/banner');
 const {client} = require('../database/connections/postgreSQL');
 const mediaAssest = require('../database/schema/mediaAsset');
-
+const accessibility = require('../database/logic/accessibility.json');
 function classcodegenerator(){
     let code = '';
 
@@ -19,13 +19,14 @@ const createClass =async (req, res)=>{
     try{
         const {classname, subject,section,description } = req.body;
 
-        console.log(req.tokendata.email);
-        // console.log(req.body.classname, req.body.subject, req.body.section, req.body.description, req.tokendata.email);
+        if(req.users_total_class >= accessibility.app_users[req.usertype].class_limit){
+            return res.status(400).json({error:true, message:"You have reached the maximum class limit Please upgrade!"});
+        }
         let classid = uuidv4();
         let result =await bannerdb.find({}, { projection: { _id: 1 } });
         const ids = result.map(doc => doc._id);
 
-        if(ids.length < 5) res.status(200).json({error:true, message:"not enough banners to create class, please add more banners to the database"});
+        if(ids.length < 5) return res.status(200).json({error:true, message:"not enough banners to create class, please add more banners to the database"});
         
         const classcode = classcodegenerator();
 
@@ -42,12 +43,12 @@ const createClass =async (req, res)=>{
             bannerid.toString(),
             classcode
         ]);
-        if(response.error) res.status(500).json({error:true, message:"Some Internal Server Error"});
+        if(response.error) return res.status(500).json({error:true, message:"Some Internal Server Error"});
         res.status(200).json({error:false, message:"class created successfully"});
 
     }catch(e){
-        console.log(e);
-        res.status(500).json({error:true, message:"internal server error"});
+        console.log("error:" + e);
+        res.status(500).json({error:true,ermsg:e, message:"internal server error"});
     }
 };
 
@@ -143,7 +144,6 @@ const enroll = async(req, res)=>{
     }
 }
 
-//updated here
 const fichercontent = async(req, res)=>{
     try{
         const {classid, title, description, mediaAsset_ids} = req.body;

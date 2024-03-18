@@ -37,10 +37,16 @@ const iseligibleforcomment = async (req, res, next) => {
     }
 };
 
+const here = (req, res, next) => {
+    console.log('here');
+    next();
+};
+
 
 const check = {
     isclasscreater,
-    iseligibleforcomment
+    iseligibleforcomment,
+    here
 };
 
 module.exports = check;
