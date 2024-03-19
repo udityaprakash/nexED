@@ -35,6 +35,7 @@ const classes = `CREATE TABLE IF NOT EXISTS class (
   section VARCHAR(64),
   description VARCHAR(512),
   can_join BOOLEAN DEFAULT TRUE,
+  archieved BOOLEAN DEFAULT FALSE,
   join_code VARCHAR(7) UNIQUE NOT NULL,
   email VARCHAR(255) REFERENCES customer(email),
   banner_id VARCHAR(64) NOT NULL,

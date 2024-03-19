@@ -29,6 +29,10 @@ router.post('/ficher/content', authAndverfication, middleware.classid, middlewar
 
 router.post('/ficher/comment', authAndverfication, middleware.fichercomment, check.iseligibleforcomment, uploadfichercomment);
 
+router.post('/home/teach', authAndverfication, );
+
+router.post('/home/joined', authAndverfication, );
+
 router.all('*', (req, res) => {
     res.status(404).json({error:true, message: 'Page not found'});
   });
