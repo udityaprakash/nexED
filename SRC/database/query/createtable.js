@@ -20,7 +20,7 @@ const createDB = `create database if not exists GclassroomDB;`;
 
 const User = `
 CREATE TABLE IF NOT EXISTS customer (
-    user_id BIGINT PRIMARY KEY,
+    user_id CHAR(21) PRIMARY KEY,
     username VARCHAR(255),
     profile_url VARCHAR(512),
     email VARCHAR(255) UNIQUE CHECK (email ~* '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
