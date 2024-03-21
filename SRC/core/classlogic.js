@@ -253,4 +253,18 @@ const resetjoincode = async(req, res)=>{
     }
 };
 
-module.exports = {createClass, updateClass, classdetatils , enroll, fichercontent, uploadFicherAssest, uploadfichercomment, resetjoincode}
+const sendclasses = async(req, res)=>{
+    try{
+        let cli = await client();
+        let response =await cli.run.query(`select * from class where email=$1`,[req.tokendata.email]);
+        if(response.error) {
+            res.status(500).json({error:true, message:"Some Internal Server Error"});
+        }else{
+            res.status(200).json({error:false, response:response.rows, message:"classes fetched successfully"});
+        }
+    }catch(e){
+        res.status(500).json({error:true, response:e, message:"internal server error"});
+    }
+};
+
+module.exports = {createClass, updateClass, classdetatils , enroll, fichercontent, uploadFicherAssest, uploadfichercomment, resetjoincode, sendclasses}

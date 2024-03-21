@@ -8,6 +8,7 @@ const {createClass, updateClass, classdetatils, enroll,fichercontent, uploadFich
 const middleware = require('../middlewares/requiredfields');
 const check = require('../middlewares/chechauthentic');
 const set = require('../middlewares/set');
+const {teaching_view, joined_view} = require('../core/components/classview');
 
 const authAndverfication =[middleware.authorization, verifytoken];
 
@@ -28,6 +29,10 @@ uploadFicherAssest);
 router.post('/ficher/content', authAndverfication, middleware.classid, middleware.fichercontent, check.isclasscreater, fichercontent);
 
 router.post('/ficher/comment', authAndverfication, middleware.fichercomment, check.iseligibleforcomment, uploadfichercomment);
+
+router.post('/h/tought', authAndverfication, teaching_view);
+
+router.post('/h/joined', authAndverfication, joined_view);
 
 router.all('*', (req, res) => {
     res.status(404).json({error:true, message: 'Page not found'});
