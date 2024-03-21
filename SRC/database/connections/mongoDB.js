@@ -10,7 +10,7 @@ var connectmongoDB = async () => {
             // }
             ).then(()=>console.log("MongoDB connected successfully")
             ).catch((e)=>{
-              console.log(`Error while connection patient, Retrying ${i++}`+ e);
+              console.log(`Error while connecting, Retrying ${i++}`+ e);
               connectDB();
             });
     } catch (error) {
