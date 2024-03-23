@@ -9,6 +9,7 @@ const middleware = require('../middlewares/requiredfields');
 const check = require('../middlewares/chechauthentic');
 const set = require('../middlewares/set');
 const {teaching_view, joined_view} = require('../core/components/classview');
+const {ficherview} = require("../core/components/ficherview");
 
 const authAndverfication =[middleware.authorization, verifytoken];
 
@@ -33,6 +34,8 @@ router.post('/ficher/comment', authAndverfication, middleware.fichercomment, che
 router.post('/h/tought', authAndverfication, teaching_view);
 
 router.post('/h/joined', authAndverfication, joined_view);
+
+router.post('/c/ficher/view',authAndverfication,ficherview);
 
 router.all('*', (req, res) => {
     res.status(404).json({error:true, message: 'Page not found'});
