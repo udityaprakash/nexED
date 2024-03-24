@@ -229,7 +229,7 @@ const uploadFicherAssest = async(req, res)=>{
     }
 }
 
-const resetjoincode = async(req, res)=>{
+const resetjoincode = async (req, res)=>{
     try{
         const {classid} = req.body;
         let cli = await client();
@@ -253,7 +253,7 @@ const resetjoincode = async(req, res)=>{
     }
 };
 
-const sendclasses = async(req, res)=>{
+const sendclasses = async (req, res)=>{
     try{
         let cli = await client();
         let response =await cli.run.query(`select * from class where email=$1`,[req.tokendata.email]);
@@ -266,5 +266,14 @@ const sendclasses = async(req, res)=>{
         res.status(500).json({error:true, response:e, message:"internal server error"});
     }
 };
+//test this end point
+const unenroll = async (req , res)=>{
+    const classid = req.body.class_id;
+    const cli = await client();
+    const result = cli.run.query(`delete from enrollment where email = $1 and class_id = $2`,[req.tokendata.email, classid]);
+    console.log(result);
+    res.json({message:"Successfully unenrolled"});
+
+}
 
 module.exports = {createClass, updateClass, classdetatils , enroll, fichercontent, uploadFicherAssest, uploadfichercomment, resetjoincode, sendclasses}

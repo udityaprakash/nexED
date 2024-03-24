@@ -57,7 +57,7 @@ const classResource = `CREATE TABLE IF NOT EXISTS ficher (
   title VARCHAR(64),
   description VARCHAR(512),
   mediaAsset_ids text[],
-  created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`;  
+  created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`;
 
 const fichercomment = `CREATE TABLE IF NOT EXISTS fichercomment (
     comment_id uuid PRIMARY KEY,
